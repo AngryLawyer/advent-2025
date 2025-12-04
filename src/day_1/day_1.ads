@@ -1,3 +1,3 @@
 package Day_1 is
-  procedure Run;
+   procedure Run;
 end Day_1;

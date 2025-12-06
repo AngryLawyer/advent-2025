@@ -6,6 +6,7 @@ use Trendy_Test.Assertions.Integer_Assertions;
 
 with Day_1.Parser;
 with Day_1.Safe;
+with Day_1.Rotation;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -36,12 +37,59 @@ package body Day_1.Tests is
    end Test_Example;
 
    procedure Test_Calculate_Passes (T : in out Trendy_Test.Operation'Class) is
+      use Day_1.Safe;
+      use Day_1.Rotation;
    begin
       T.Register;
-      Assert_EQ (T, Day_1.Safe.Calculate_Passes (Day_1.Safe.Safe_Position (50), 49), 0);
-      Assert_EQ (T, Day_1.Safe.Calculate_Passes (Day_1.Safe.Safe_Position (50), 50), 1);
-      Assert_EQ (T, Day_1.Safe.Calculate_Passes (Day_1.Safe.Safe_Position (50), 51), 1);
-      Assert_EQ (T, Day_1.Safe.Calculate_Passes (Day_1.Safe.Safe_Position (50), 1000), 10);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Right, 49)
+      ), 0);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Right, 50)
+      ), 1);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Right, 51)
+      ), 1);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Right, 1000)
+      ), 10);
+
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Left, 49)
+      ), 0);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Left, 50)
+      ), 1);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Left, 51)
+      ), 1);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Left, 1000)
+      ), 10);
+
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (25), (Left, 24)
+      ), 0);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (25), (Left, 25)
+      ), 1);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (25), (Left, 26)
+      ), 1);
+
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (50), (Left, 68)
+      ), 1);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (82), (Left, 30)
+      ), 0);
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (52), (Right, 48)
+      ), 1);
+
+      Assert_EQ (T, Calculate_Passes (
+         Safe_Position (0), (Left, 5)
+      ), 0);
 
    end Test_Calculate_Passes;
 

@@ -8,7 +8,7 @@ package body Day_1.Safe is
 
    procedure Apply (S : in out Safe; Action : Day_1.Rotation.Rotation) is
    begin
-      S.Passes := S.Passes + (Calculate_Passes (S.Pos, Action.Amount));
+      S.Passes := S.Passes + (Calculate_Passes (S.Pos, Action));
       case Action.Dir is
          when Day_1.Rotation.Left =>
             S.Pos := S.Pos - Safe_Position'Mod (Action.Amount);
@@ -38,11 +38,23 @@ package body Day_1.Safe is
    end Pass_Count;
 
    function Calculate_Passes
-     (P : Safe_Position; Distance : Natural) return Integer
+     (P : Safe_Position; Action : Day_1.Rotation.Rotation) return Integer
    is
-      Total : Natural;
+      use type Day_1.Rotation.Direction;
+      Initial : Natural;
+      Total   : Natural;
+      Result  : Natural;
    begin
-      Total := Natural (P) + Distance;
-      return Total / 100;
+      if Action.Dir = Day_1.Rotation.Left then
+         Initial := 100 - (Natural (P));
+      else
+         Initial := Natural (P);
+      end if;
+      Total := Initial + Action.Amount;
+      Result := Total / 100;
+      if Action.Dir = Day_1.Rotation.Left and then P = 0 then
+         return Result - 1;
+      end if;
+      return Result;
    end Calculate_Passes;
 end Day_1.Safe;

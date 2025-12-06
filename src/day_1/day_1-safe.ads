@@ -10,7 +10,7 @@ package Day_1.Safe is
    function Pass_Count (S : Safe) return Integer;
    function Position (S : Safe) return Safe_Position;
    function Calculate_Passes
-     (P : Safe_Position; Distance : Natural) return Integer;
+     (P : Safe_Position; Action : Day_1.Rotation.Rotation) return Integer;
 private
    type Safe is record
       Pos         : Safe_Position;

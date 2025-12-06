@@ -1,0 +1,21 @@
+name = "tests"
+description = ""
+version = "0.1.0-dev"
+
+authors = ["Your Name"]
+maintainers = ["Your Name <example@example.com>"]
+maintainers-logins = ["github-username"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+[[depends-on]]
+advent2025 = "*"
+
+[[pins]]
+advent2025 = { path='..' }
+
+[[depends-on]]
+
+[[depends-on]]
+trendy_test = "~0.0.3"

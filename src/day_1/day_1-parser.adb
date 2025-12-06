@@ -4,19 +4,21 @@ with Ada.Strings.Fixed;
 package body Day_1.Parser is
 
    function Parse_Line (Line : String) return Day_1.Rotation.Rotation is
-      Dir : Day_1.Rotation.Direction;
-      Amount : Integer;
+      Dir    : Day_1.Rotation.Direction;
+      Amount : Natural;
    begin
       case Line (Line'First) is
          when 'L' =>
             Dir := Day_1.Rotation.Left;
+
          when 'R' =>
             Dir := Day_1.Rotation.Right;
+
          when others =>
             raise ParseError;
       end case;
 
-      Amount := Integer'Value (Ada.Strings.Fixed.Tail (Line, Line'Length - 1));
+      Amount := Natural'Value (Ada.Strings.Fixed.Tail (Line, Line'Length - 1));
 
       return (Dir, Amount);
    end Parse_Line;

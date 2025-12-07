@@ -10,3 +10,6 @@ website = ""
 tags = []
 
 executables = ["advent2025"]
+
+[[depends-on]]
+parse_args = "~0.9.0"

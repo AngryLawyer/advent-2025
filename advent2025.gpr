@@ -8,7 +8,10 @@ project Advent2025 is
    for Main use ("advent2025.adb");
 
    package Compiler is
-      for Default_Switches ("Ada") use Advent2025_Config.Ada_Compiler_Switches;
+      for Default_Switches ("Ada") use Advent2025_Config.Ada_Compiler_Switches & 
+         (
+            "-gnat2022"
+         );
    end Compiler;
 
    package Binder is

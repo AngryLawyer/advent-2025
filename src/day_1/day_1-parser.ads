@@ -8,7 +8,7 @@ package Day_1.Parser is
         Element_Type => Day_1.Rotation.Rotation,
         "="          => Day_1.Rotation."=");
 
-   ParseError : exception;
+   Parse_Error : exception;
 
    function Read_Directions (Path : String) return Rotation_Vectors.Vector;
    function Parse_Line (Line : String) return Day_1.Rotation.Rotation;

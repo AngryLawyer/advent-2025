@@ -15,7 +15,7 @@ package body Day_1.Parser is
             Dir := Day_1.Rotation.Right;
 
          when others =>
-            raise ParseError;
+            raise Parse_Error;
       end case;
 
       Amount := Natural'Value (Ada.Strings.Fixed.Tail (Line, Line'Length - 1));

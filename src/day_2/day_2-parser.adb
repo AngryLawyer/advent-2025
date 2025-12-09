@@ -1,13 +1,13 @@
 with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT;
+with Day_2.Types; use Day_2.Types;
 
 package body Day_2.Parser is
 
-   function Parse_Range (Raw : String) return Day_2.Product_Range.Product_Range is
+   function Parse_Range (Raw : String) return Product_Range is
       Subs : GNAT.String_Split.Slice_Set;
       Seps : constant String := "-";
-      Output : Day_2.Product_Range.Product_Range;
+      Output : Product_Range;
    begin
       String_Split.Create (S => Subs,
                            From => Raw,
@@ -18,8 +18,10 @@ package body Day_2.Parser is
          raise Parse_Error;
       end if;
 
-      Output.Left := Positive'Value (String_Split.Slice (Subs, 1));
-      Output.Right := Positive'Value (String_Split.Slice (Subs, 2));
+      Put_Line (String_Split.Slice (Subs, 1));
+
+      Output.Left := Long_Natural'Value (String_Split.Slice (Subs, 1));
+      Output.Right := Long_Natural'Value (String_Split.Slice (Subs, 2));
 
       return Output;
    end Parse_Range;

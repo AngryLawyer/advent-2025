@@ -9,13 +9,11 @@ licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
 website = ""
 tags = []
 
-[[depends-on]]
-advent2025 = "*"
+executables = ["tests"]
 
 [[pins]]
 advent2025 = { path='..' }
 
 [[depends-on]]
-
-[[depends-on]]
 trendy_test = "~0.0.3"
+advent2025 = "*"

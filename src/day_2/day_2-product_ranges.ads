@@ -18,6 +18,6 @@ package Day_2.Product_Ranges is
         Element_Type => Product_Range,
         "="          => "=");
 
-   function Invalid_Ids (R : Product_Range) return Natural_Sets.Set;
-   function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector) return Long_Natural;
+   function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return Natural_Sets.Set;
+   function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector; Any_Repeated : Boolean) return Long_Natural;
 end Day_2.Product_Ranges;

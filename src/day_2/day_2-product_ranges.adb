@@ -27,7 +27,7 @@ package body Day_2.Product_Ranges is
       return Long_Natural'Value (Slice (S, 1, Half) & Slice (S, 1, Half));
    end Duplicated;
 
-   function Invalid_Ids (R : Product_Range) return Natural_Sets.Set is
+   function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return Natural_Sets.Set is
       Start_Check : Long_Natural;
       Stop_Check : Long_Natural;
       Step : Long_Natural;
@@ -56,12 +56,12 @@ package body Day_2.Product_Ranges is
       return Invalid_Numbers;
    end Invalid_Ids;
 
-   function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector) return Long_Natural is
+   function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector; Any_Repeated : Boolean) return Long_Natural is
       Invalid_Numbers : Natural_Sets.Set;
       Output : Long_Natural := 0;
    begin
       for R of RS loop
-         Invalid_Numbers.Union (Invalid_Ids (R));
+         Invalid_Numbers.Union (Invalid_Ids (R, Any_Repeated));
       end loop;
       for I of Invalid_Numbers loop
          Output := Output + I;

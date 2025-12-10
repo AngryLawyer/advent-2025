@@ -10,6 +10,7 @@ package body Day_2 is
       Ranges : Product_Range_Vectors.Vector;
    begin
       Ranges := Read_Ranges ("./data/day_2.txt");
-      Put_Line ("Total invalid ids" & Long_Natural'Image (Total_Of_Invalid_Ids (Ranges)));
+      Put_Line ("Total invalid ids" & Long_Natural'Image (Total_Of_Invalid_Ids (Ranges, False)));
+      Put_Line ("Total invalid ids part 2" & Long_Natural'Image (Total_Of_Invalid_Ids (Ranges, True)));
    end Run;
 end Day_2;

@@ -1,7 +1,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Day_2.Product_Ranges;
 with Day_2.Parser;
-with Day_2.Types; use Day_2.Types;
+with Day_2.Numerics; use Day_2.Numerics;
 
 package body Day_2 is
    procedure Run is

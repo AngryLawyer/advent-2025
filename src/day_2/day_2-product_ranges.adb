@@ -5,59 +5,81 @@ with Ada.Strings;
 
 package body Day_2.Product_Ranges is
    function Count_Digits (N : Long_Natural) return Natural is
-      package Float_Functions is
-         new Ada.Numerics.Generic_Elementary_Functions (Long_Float);
-   begin
-      if N = 0 then
-         return 0;
-      end if;
-      return Natural (Long_Float'Floor (Float_Functions.Log (Long_Float (N), 10.0))) + 1;
-   end Count_Digits;
-
-   function Duplicated (N : Long_Natural) return Long_Natural
-      with Pre => Count_Digits (N) mod 2 = 0
-   is
       S : Unbounded_String;
-      Half : Natural;
    begin
       S := To_Unbounded_String (N'Image);
       Trim (S, Ada.Strings.Both);
-      Half := (Length (S)) / 2;
+      return Length (S);
+   end Count_Digits;
 
-      return Long_Natural'Value (Slice (S, 1, Half) & Slice (S, 1, Half));
+   function Duplicated (N : Long_Natural; Size : Positive; Repetitions : Positive) return Long_Natural
+   is
+      Len : Natural;
+      Sliced : Long_Natural;
+      Acc : Long_Natural := 0;
+   begin
+      Len := Count_Digits (N);
+      Sliced := N / (10 ** (Len - Size));
+
+      for I in 0 .. (Repetitions - 1) loop
+         Acc := Acc + (Sliced * (10 ** (I * Size)));
+      end loop;
+
+      return Acc;
    end Duplicated;
 
-   function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return Natural_Sets.Set is
+   procedure Invalid_Ids_For_Length (R : Product_Range; Digit_Count : Positive; Divisor : Positive; Matches : in out Long_Natural_Sets.Set) is
       Start_Check : Long_Natural;
       Stop_Check : Long_Natural;
       Step : Long_Natural;
       I : Long_Natural;
-      D : Long_Natural;
-      Invalid_Numbers: Natural_Sets.Set;
+      Duplicated_Number : Long_Natural;
+      Chunk_Size : Positive;
    begin
-      Step := 10 ** (Count_Digits (R.Left) / 2);
+      Chunk_Size := Digit_Count / Divisor;
+      Step := 10 ** Chunk_Size;
       Start_Check := R.Left / Step * Step;
       Stop_Check := R.Right / Step * Step;
       I := Start_Check;
-      Put_Line ("In range " & R.Left'Image & R.Right'Image);
       while I <= Stop_Check loop
-         -- Impossible to have a duplicated string on odd character count
-         if Count_Digits (I) mod 2 = 0 then
-            D := Duplicated (I);
-            if D >= R.Left and then D <= R.Right then
-               Put_Line (I'Image & " Duplicated" & D'Image);
-               if Invalid_Numbers.Contains (D) = false then
-                  Invalid_Numbers.Insert (D);
-               end if;
+         Duplicated_Number := Duplicated (I, Chunk_Size, Divisor);
+         if Duplicated_Number >= R.Left and then Duplicated_Number <= R.Right then
+            if Matches.Contains (Duplicated_Number) = False then
+               Matches.Insert (Duplicated_Number);
             end if;
          end if;
          I := I + Step;
+      end loop;
+   end Invalid_Ids_For_Length;
+
+   function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return Long_Natural_Sets.Set is
+      Digit_Count : Positive;
+      Divisors: Positive_Sets.Set;
+      Left_Digits : Positive;
+      Right_Digits : Positive;
+      Invalid_Numbers : Long_Natural_Sets.Set;
+   begin
+      Left_Digits := Count_Digits (R.Left);
+      Right_Digits := Count_Digits (R.Right);
+
+      if not Any_Repeated then
+         Divisors.Insert (2);
+      else
+         -- Find all factors, and discard 1 as we need a minimum of 2 loops
+         for I in Left_Digits .. Right_Digits loop
+            Divisors := Divisors.Union (Factors (I));
+         end loop;
+         Divisors.Delete (1);
+      end if;
+
+      for Divisor of Divisors loop
+         Invalid_Ids_For_Length (R, Right_Digits, Divisor, Invalid_Numbers);
       end loop;
       return Invalid_Numbers;
    end Invalid_Ids;
 
    function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector; Any_Repeated : Boolean) return Long_Natural is
-      Invalid_Numbers : Natural_Sets.Set;
+      Invalid_Numbers : Long_Natural_Sets.Set;
       Output : Long_Natural := 0;
    begin
       for R of RS loop

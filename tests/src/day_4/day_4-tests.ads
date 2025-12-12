@@ -1,5 +1,5 @@
 with Trendy_Test;
 
-package Day_3.Tests is
+package Day_4.Tests is
    function All_Tests return Trendy_Test.Test_Group;
-end Day_3.Tests;
+end Day_4.Tests;

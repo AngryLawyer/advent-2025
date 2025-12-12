@@ -12,8 +12,6 @@ with Types; use Types;
 
 with Stringly_Asserts;
 
-with Ada.Text_IO; use Ada.Text_IO;
-
 package body Day_2.Tests is
    use Day_2.Product_Ranges;
    use Day_2.Parser;
@@ -34,16 +32,9 @@ package body Day_2.Tests is
          Image => Positive_Sets.Set'Image
       );
 
-   package Positive_Vector_Assertions
-      is new Stringly_Asserts (
-         Element_Type => Positive_Vectors.Vector,
-         Image => Positive_Vectors.Vector'Image
-      );
-
    use U64_Assertions;
    use U64_Set_Assertions;
    use Positive_Set_Assertions;
-   use Positive_Vector_Assertions;
 
    Range_Array : constant String_Vectors.Vector := [
       "11-22",

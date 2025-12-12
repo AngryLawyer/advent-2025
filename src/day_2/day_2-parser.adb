@@ -1,6 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.String_Split; use GNAT;
-with Day_2.Numerics; use Day_2.Numerics;
+with Types; use Types;
 
 package body Day_2.Parser is
 
@@ -18,8 +18,8 @@ package body Day_2.Parser is
          raise Parse_Error;
       end if;
 
-      Output.Left := Long_Natural'Value (String_Split.Slice (Subs, 1));
-      Output.Right := Long_Natural'Value (String_Split.Slice (Subs, 2));
+      Output.Left := U64'Value (String_Split.Slice (Subs, 1));
+      Output.Right := U64'Value (String_Split.Slice (Subs, 2));
 
       return Output;
    end Parse_Range;

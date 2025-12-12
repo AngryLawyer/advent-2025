@@ -11,7 +11,5 @@ package Day_2.Numerics is
      Ada.Containers.Ordered_Sets
        (Element_Type => Positive);
 
-   subtype Long_Natural is Long_Integer range 0 .. Long_Integer'Last;
-
    function Factors (N : Positive) return Positive_Sets.Set;
 end Day_2.Numerics;

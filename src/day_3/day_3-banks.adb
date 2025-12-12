@@ -1,41 +1,43 @@
+with Ada.Text_IO; use Ada.Text_IO;
+
 package body Day_3.Banks is
-   type Check_Pair is record 
-      Value : Digit := 0;
-      Position : Positive := 1;
-   end record;
-
-   function Joltage (B : Bank) return Natural is
-      Length : Natural;
-      First_Digit : Check_Pair;
-      Second_Digit : Digit := 0;
+   function Joltage_Inner (B : Bank; Start : Positive; Reserve_Digits : Natural; Current_Total : Natural) return Natural is
+      Best : Digit := 0;
+      Position : Positive := Start;
       Current_Digit : Digit := 0;
-      Result : Natural;
+      Local_Total : Natural := Current_Total;
    begin
-      Length := Natural (B.Length);
-      for I in 1 .. Length - 1 loop
+      for I in Start .. (Natural (B.Length) - Reserve_Digits) loop
          Current_Digit := B.Element (I);
-         if Current_Digit > First_Digit.Value then
-            First_Digit.Value := Current_Digit;
-            First_Digit.Position := I;
+         Put_Line (Current_Digit'Image);
+         if Current_Digit > Best then
+            Best := Current_Digit;
+            Position := I;
          end if;
       end loop;
+      
+      Local_Total := Local_Total + (Best * (10 ** Reserve_Digits));
 
-      Current_Digit := 0;
-      for I in (First_Digit.Position + 1) .. Length loop
-         Current_Digit := B.Element (I);
-         if Current_Digit > Second_Digit then
-            Second_Digit := Current_Digit;
-         end if;
-      end loop;
+      if Reserve_Digits = 0 then
+         return Local_Total;
+      end if;
 
-      return (First_Digit.Value * 10) + Second_Digit;
+      return Joltage_Inner (B, Position + 1, Reserve_Digits - 1, Local_Total);
+   end Joltage_Inner;
+
+   function Joltage (B : Bank; Safety_Override : Boolean) return Natural is
+   begin
+      if Safety_Override = True then
+         return Joltage_Inner (B, 1, 11, 0);
+      end if;
+      return Joltage_Inner (B, 1, 1, 0); 
    end Joltage;
 
-   function Total_Joltage (Banks : Bank_Vectors.Vector) return Natural is
+   function Total_Joltage (Banks : Bank_Vectors.Vector; Safety_Override : Boolean) return Natural is
       Total : Natural := 0;
    begin
       for B of Banks loop
-         Total := Total + Joltage (B);
+         Total := Total + Joltage (B, Safety_Override);
       end loop;
       return Total;
    end Total_Joltage;

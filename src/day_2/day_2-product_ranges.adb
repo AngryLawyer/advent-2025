@@ -4,7 +4,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings;
 
 package body Day_2.Product_Ranges is
-   function Count_Digits (N : Long_Natural) return Natural is
+   function Count_Digits (N : U64) return Natural is
       S : Unbounded_String;
    begin
       S := To_Unbounded_String (N'Image);
@@ -12,11 +12,11 @@ package body Day_2.Product_Ranges is
       return Length (S);
    end Count_Digits;
 
-   function Duplicated (N : Long_Natural; Size : Positive; Repetitions : Positive) return Long_Natural
+   function Duplicated (N : U64; Size : Positive; Repetitions : Positive) return U64
    is
       Len : Natural;
-      Sliced : Long_Natural;
-      Acc : Long_Natural := 0;
+      Sliced : U64;
+      Acc : U64 := 0;
    begin
       Len := Count_Digits (N);
       Sliced := N / (10 ** (Len - Size));
@@ -28,12 +28,12 @@ package body Day_2.Product_Ranges is
       return Acc;
    end Duplicated;
 
-   procedure Invalid_Ids_For_Length (R : Product_Range; Digit_Count : Positive; Divisor : Positive; Matches : in out Long_Natural_Sets.Set) is
-      Start_Check : Long_Natural;
-      Stop_Check : Long_Natural;
-      Step : Long_Natural;
-      I : Long_Natural;
-      Duplicated_Number : Long_Natural;
+   procedure Invalid_Ids_For_Length (R : Product_Range; Digit_Count : Positive; Divisor : Positive; Matches : in out U64_Sets.Set) is
+      Start_Check : U64;
+      Stop_Check : U64;
+      Step : U64;
+      I : U64;
+      Duplicated_Number : U64;
       Chunk_Size : Positive;
    begin
       Chunk_Size := Digit_Count / Divisor;
@@ -52,12 +52,12 @@ package body Day_2.Product_Ranges is
       end loop;
    end Invalid_Ids_For_Length;
 
-   function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return Long_Natural_Sets.Set is
+   function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return U64_Sets.Set is
       Digit_Count : Positive;
       Divisors: Positive_Sets.Set;
       Left_Digits : Positive;
       Right_Digits : Positive;
-      Invalid_Numbers : Long_Natural_Sets.Set;
+      Invalid_Numbers : U64_Sets.Set;
    begin
       Left_Digits := Count_Digits (R.Left);
       Right_Digits := Count_Digits (R.Right);
@@ -78,9 +78,9 @@ package body Day_2.Product_Ranges is
       return Invalid_Numbers;
    end Invalid_Ids;
 
-   function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector; Any_Repeated : Boolean) return Long_Natural is
-      Invalid_Numbers : Long_Natural_Sets.Set;
-      Output : Long_Natural := 0;
+   function Total_Of_Invalid_Ids (RS : Product_Range_Vectors.Vector; Any_Repeated : Boolean) return U64 is
+      Invalid_Numbers : U64_Sets.Set;
+      Output : U64 := 0;
    begin
       for R of RS loop
          Invalid_Numbers.Union (Invalid_Ids (R, Any_Repeated));

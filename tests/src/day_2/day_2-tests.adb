@@ -8,6 +8,7 @@ use Trendy_Test.Assertions.Integer_Assertions;
 with Day_2.Parser;
 with Day_2.Product_Ranges;
 with Day_2.Numerics;
+with Types; use Types;
 
 with Stringly_Asserts;
 
@@ -18,13 +19,13 @@ package body Day_2.Tests is
    use Day_2.Parser;
    use Day_2.Numerics;
 
-   package Long_Integer_Assertions
-       is new Trendy_Test.Assertions.Discrete (Long_Integer);
+   package U64_Assertions
+       is new Trendy_Test.Assertions.Discrete (U64);
 
-   package Long_Natural_Set_Assertions
+   package U64_Set_Assertions
       is new Stringly_Asserts (
-         Element_Type => Long_Natural_Sets.Set,
-         Image => Long_Natural_Sets.Set'Image
+         Element_Type => U64_Sets.Set,
+         Image => U64_Sets.Set'Image
       );
 
    package Positive_Set_Assertions
@@ -39,8 +40,8 @@ package body Day_2.Tests is
          Image => Positive_Vectors.Vector'Image
       );
 
-   use Long_Integer_Assertions;
-   use Long_Natural_Set_Assertions;
+   use U64_Assertions;
+   use U64_Set_Assertions;
    use Positive_Set_Assertions;
    use Positive_Vector_Assertions;
 

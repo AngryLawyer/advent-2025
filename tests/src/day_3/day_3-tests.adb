@@ -34,11 +34,20 @@ package body Day_3.Tests is
    procedure Test_Joltage (T : in out Trendy_Test.Operation'Class) is
    begin
       T.Register;
-      Assert_EQ (T, Joltage (Parse_Bank ("987654321111111")), 98);
-      Assert_EQ (T, Joltage (Parse_Bank ("811111111111119")), 89);
-      Assert_EQ (T, Joltage (Parse_Bank ("234234234234278")), 78);
-      Assert_EQ (T, Joltage (Parse_Bank ("818181911112111")), 92);
+      Assert_EQ (T, Joltage (Parse_Bank ("987654321111111"), False), 98);
+      Assert_EQ (T, Joltage (Parse_Bank ("811111111111119"), False), 89);
+      Assert_EQ (T, Joltage (Parse_Bank ("234234234234278"), False), 78);
+      Assert_EQ (T, Joltage (Parse_Bank ("818181911112111"), False), 92);
    end Test_Joltage;
+
+   procedure Test_Joltage_Extended (T : in out Trendy_Test.Operation'Class) is
+   begin
+      T.Register;
+      Assert_EQ (T, Joltage (Parse_Bank ("987654321111111"), True), 987654321111);
+      Assert_EQ (T, Joltage (Parse_Bank ("811111111111119"), True), 811111111119);
+      Assert_EQ (T, Joltage (Parse_Bank ("234234234234278"), True), 434234234278);
+      Assert_EQ (T, Joltage (Parse_Bank ("818181911112111"), True), 888911112111);
+   end Test_Joltage_Extended;
 
    procedure Test_Example (T : in out Trendy_Test.Operation'Class) is
       Parsed_Bank_Array : Bank_Vectors.Vector;
@@ -47,8 +56,18 @@ package body Day_3.Tests is
       for Raw of Bank_Array loop
          Parsed_Bank_Array.Append (Parse_Bank (Raw));
       end loop;
-      Assert_EQ (T, Total_Joltage (Parsed_Bank_Array), 357);
+      Assert_EQ (T, Total_Joltage (Parsed_Bank_Array, False), 357);
    end Test_Example;
+
+   procedure Test_Example_Extended (T : in out Trendy_Test.Operation'Class) is
+      Parsed_Bank_Array : Bank_Vectors.Vector;
+   begin
+      T.Register;
+      for Raw of Bank_Array loop
+         Parsed_Bank_Array.Append (Parse_Bank (Raw));
+      end loop;
+      Assert_EQ (T, Total_Joltage (Parsed_Bank_Array, True), 3121910778619);
+   end Test_Example_Extended;
 
    function All_Tests return Trendy_Test.Test_Group is
    begin
@@ -56,7 +75,9 @@ package body Day_3.Tests is
          [
             Test_Parse_Bank'Access,
             Test_Joltage'Access,
-            Test_Example'Access
+            Test_Joltage_Extended'Access,
+            Test_Example'Access,
+            Test_Example_Extended'Access
          ];
    end All_Tests;
 end Day_3.Tests;

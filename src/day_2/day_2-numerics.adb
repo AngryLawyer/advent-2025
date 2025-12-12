@@ -8,5 +8,5 @@ package body Day_2.Numerics is
          end if;
       end loop;
       return Output;
-   end;
+   end Factors;
 end Day_2.Numerics;

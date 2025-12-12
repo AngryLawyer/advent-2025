@@ -1,4 +1,5 @@
 with Trendy_Test;
+with Trendy_Test.Assertions.Discrete;
 with Trendy_Test.Assertions.Integer_Assertions;
 
 use Trendy_Test.Assertions;
@@ -6,16 +7,21 @@ use Trendy_Test.Assertions.Integer_Assertions;
 with Stringly_Asserts;
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Types; use Types;
 with Day_3.Parser; use Day_3.Parser;
 with Day_3.Banks; use Day_3.Banks;
 
 package body Day_3.Tests is
+   package U64_Assertions
+       is new Trendy_Test.Assertions.Discrete (U64);
+
    package Bank_Assertions
       is new Stringly_Asserts (
          Element_Type => Bank,
          Image => Bank'Image
       );
 
+   use U64_Assertions;
    use Bank_Assertions;
 
    Bank_Array : constant String_Vectors.Vector := [

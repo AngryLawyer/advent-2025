@@ -1,17 +1,14 @@
 with Ada.Containers.Ordered_Sets;
 with Ada.Containers.Vectors;
-with Day_2.Numerics; use Day_2.Numerics;
 with Types; use Types;
+with Ranges; use Ranges;
 
 package Day_2.Product_Ranges is
    package U64_Sets is new
      Ada.Containers.Ordered_Sets
        (Element_Type => U64);
 
-   type Product_Range is record
-      Left  : U64;
-      Right : U64;
-   end record;
+   subtype Product_Range is U64_Range;
 
    package Product_Range_Vectors is new
      Ada.Containers.Vectors

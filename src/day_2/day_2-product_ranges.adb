@@ -1,7 +1,6 @@
-with Ada.Numerics.Generic_Elementary_Functions;
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings;
+with Day_2.Numerics; use Day_2.Numerics;
 
 package body Day_2.Product_Ranges is
    function Count_Digits (N : U64) return Natural is
@@ -53,8 +52,7 @@ package body Day_2.Product_Ranges is
    end Invalid_Ids_For_Length;
 
    function Invalid_Ids (R : Product_Range; Any_Repeated : Boolean) return U64_Sets.Set is
-      Digit_Count : Positive;
-      Divisors: Positive_Sets.Set;
+      Divisors : Positive_Sets.Set;
       Left_Digits : Positive;
       Right_Digits : Positive;
       Invalid_Numbers : U64_Sets.Set;
@@ -65,7 +63,7 @@ package body Day_2.Product_Ranges is
       if not Any_Repeated then
          Divisors.Insert (2);
       else
-         -- Find all factors, and discard 1 as we need a minimum of 2 loops
+         --  Find all factors, and discard 1 as we need a minimum of 2 loops
          for I in Left_Digits .. Right_Digits loop
             Divisors := Divisors.Union (Factors (I));
          end loop;

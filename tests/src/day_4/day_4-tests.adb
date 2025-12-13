@@ -43,12 +43,21 @@ package body Day_4.Tests is
       Assert_EQ (T, Total_Accessible(R), 13);
    end Test_Example;
 
+   procedure Test_Example_Extended (T : in out Trendy_Test.Operation'Class) is
+      R : Rack;
+   begin
+      T.Register;
+      R := Parse_Rack (Raw);
+      Assert_EQ (T, Total_Accessible_With_Removal(R), 43);
+   end Test_Example_Extended;
+
    function All_Tests return Trendy_Test.Test_Group is
    begin
       return
          [
             Test_Parse_Rack'Access,
-            Test_Example'Access
+            Test_Example'Access,
+            Test_Example_Extended'Access
          ];
    end All_Tests;
 end Day_4.Tests;

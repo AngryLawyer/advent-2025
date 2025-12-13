@@ -23,4 +23,5 @@ package Day_4.Racks is
 
    function Is_Accessible (R : Rack; X : Positive; Y : Positive) return Boolean;
    function Total_Accessible (R : Rack) return Natural;
+   function Total_Accessible_With_Removal (R : in out Rack) return Natural;
 end Day_4.Racks;

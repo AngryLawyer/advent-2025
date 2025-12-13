@@ -24,14 +24,27 @@ package body Day_4.Racks is
       return Adjacent_Count < 4;
    end Is_Accessible;
 
-   function Total_Accessible (R : Rack) return Natural is
-      Total : Natural := 0;
+   function Get_Accessible (R : Rack) return Coordinate_Sets.Set is
+      Accessible : Coordinate_Sets.Set;
    begin
       for Scroll of R.Scrolls loop
          if Is_Accessible (R, Scroll.X, Scroll.Y) then
-            Total := Total + 1;
+            Accessible.Insert ((Scroll.X, Scroll.Y));
          end if;
       end loop;
-      return Total;
+      return Accessible;
+   end Get_Accessible;
+
+   function Total_Accessible (R : Rack) return Natural is
+      Accessible : Coordinate_Sets.Set;
+   begin
+      Accessible := Get_Accessible (R);
+      return Integer (Accessible.Length);
    end Total_Accessible;
+
+   function Total_Accessible_With_Removal (R : in out Rack) return Natural is
+      Total : Natural := 0;
+   begin
+      return Total;
+   end Total_Accessible_With_Removal;
 end Day_4.Racks;

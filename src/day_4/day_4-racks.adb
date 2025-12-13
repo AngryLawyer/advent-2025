@@ -44,7 +44,14 @@ package body Day_4.Racks is
 
    function Total_Accessible_With_Removal (R : in out Rack) return Natural is
       Total : Natural := 0;
+      Current_Accessible : Coordinate_Sets.Set;
    begin
+      Current_Accessible := Get_Accessible (R);
+      while Current_Accessible.Length > 0 loop
+         Total := Total + Integer (Current_Accessible.Length);
+         R.Scrolls := R.Scrolls.Difference (Current_Accessible);
+         Current_Accessible := Get_Accessible (R);
+      end loop;
       return Total;
    end Total_Accessible_With_Removal;
 end Day_4.Racks;

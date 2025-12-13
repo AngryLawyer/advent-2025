@@ -8,5 +8,6 @@ package body Day_4 is
    begin
       R := Read_Rack ("./data/day_4.txt");
       Put_Line ("Accessible scrolls" & Natural'Image (Total_Accessible (R)));
+      Put_Line ("Accessible scrolls with removal" & Natural'Image (Total_Accessible_With_Removal (R)));
    end Run;
 end Day_4;

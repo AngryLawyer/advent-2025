@@ -1,7 +1,5 @@
-with Types;
-with Day_4.Racks;
-use Day_4.Racks;
-use Types;
+with Types; use Types;
+with Day_4.Racks; use Day_4.Racks;
 
 package Day_4.Parser is
    function Parse_Rack (Raw : String_Vectors.Vector) return Rack;

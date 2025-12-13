@@ -1,12 +1,10 @@
 with Ada.Text_IO; use Ada.Text_IO;
-with Day_3.Banks;
-with Day_3.Parser;
+with Day_3.Banks; use Day_3.Banks;
+with Day_3.Parser; use Day_3.Parser;
 with Types; use Types;
 
 package body Day_3 is
    procedure Run is
-      use Day_3.Banks;
-      use Day_3.Parser;
       Banks : Bank_Vectors.Vector;
    begin
       Banks := Read_Banks ("./data/day_3.txt");

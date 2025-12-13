@@ -3,8 +3,8 @@ with Ada.Containers.Hashed_Sets;
 
 package Day_4.Racks is
    type Coordinate is record
-      x : Positive;  -- It's standard in Ada to 1-index things
-      y : Positive;
+      X : Positive;  -- It's standard in Ada to 1-index things
+      Y : Positive;
    end record;
 
    function Hash (C : Coordinate) return Hash_Type;
@@ -21,5 +21,6 @@ package Day_4.Racks is
       Height : Positive;
    end record;
 
-   function Is_Accessible (X : Positive; Y : Positive) return Boolean;
+   function Is_Accessible (R : Rack; X : Positive; Y : Positive) return Boolean;
+   function Total_Accessible (R : Rack) return Natural;
 end Day_4.Racks;

@@ -1,5 +1,4 @@
 with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Strings;
 
 package body Day_4.Parser is
    function Parse_Rack (Raw : String_Vectors.Vector) return Rack is
@@ -9,14 +8,14 @@ package body Day_4.Parser is
    begin
       Height := Positive (Raw.Length);
       declare
-         S : String := Raw (1);
+         S : constant String := Raw (1);
       begin
          Width := S'Length;
       end;
 
       for Line_Index in Raw.First_Index .. Raw.Last_Index loop
          declare
-            Line : String := Raw (Line_Index);
+            Line : constant String := Raw (Line_Index);
          begin
             for Char_Index in Line'Range loop
                if Line (Char_Index) = '@' then

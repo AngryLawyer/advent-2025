@@ -1,7 +1,10 @@
 with Types; use Types;
 with Day_5.Databases; use Day_5.Databases;
+with Parsers;
 
 package Day_5.Parser is
+   Parse_Error : exception;
+
    procedure Parse_Line (Collector : in out Database; Line : String);
 
    package P is new Parsers (

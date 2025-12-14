@@ -9,6 +9,7 @@ with Day_2.Parser;
 with Day_2.Product_Ranges;
 with Day_2.Numerics;
 with Types; use Types;
+with Ranges; use Ranges;
 
 with Stringly_Asserts;
 

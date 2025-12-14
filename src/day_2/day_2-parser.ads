@@ -5,7 +5,6 @@ with Parsers;
 package Day_2.Parser is
    Parse_Error : exception;
 
-   function Parse_Range (Raw : String) return Product_Range;
    procedure Parse_Line (Collector : in out Product_Range_Vectors.Vector; Line : String);
 
    package P is new Parsers (

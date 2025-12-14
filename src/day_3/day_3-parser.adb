@@ -6,19 +6,13 @@ package body Day_3.Parser is
       B : Bank;
    begin
       for I in Raw'Range loop
-         B.Append (Natural'Value ((1 => Raw (I))));
+         B.Append (Natural'Value ([1 => Raw (I)]));
       end loop;
       return B;
    end Parse_Bank;
 
-   function Read_Banks (Path : String) return Bank_Vectors.Vector is
-      V : Bank_Vectors.Vector;
-      F : File_Type;
+   procedure Parse_Line (Collector : in out Bank_Vectors.Vector; Line : String) is
    begin
-      Open (F, In_File, Path);
-      while not End_Of_File (F) loop
-         V.Append (Parse_Bank (Get_Line (F)));
-      end loop;
-      return V;
-   end Read_Banks;
+      Collector.Append (Parse_Bank (Line));
+   end Parse_Line;
 end Day_3.Parser;

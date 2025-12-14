@@ -24,22 +24,16 @@ package body Day_2.Parser is
       return Output;
    end Parse_Range;
 
-   function Read_Ranges (Path : String) return Product_Range_Vectors.Vector is
-      V : Product_Range_Vectors.Vector;
-      F : File_Type;
+   procedure Parse_Line (Collector : in out Product_Range_Vectors.Vector; Line : String) is
       Subs : String_Split.Slice_Set;
       Seps : constant String := ",";
    begin
-      Open (F, In_File, Path);
-      while not End_Of_File (F) loop
-         String_Split.Create (S => Subs,
-                              From => Get_Line (F),
-                              Separators => Seps,
-                              Mode => String_Split.Multiple);
-         for I in 1 .. String_Split.Slice_Count (Subs) loop
-            V.Append (Parse_Range (String_Split.Slice (Subs, I)));
-         end loop;
+      String_Split.Create (S => Subs,
+                           From => Line,
+                           Separators => Seps,
+                           Mode => String_Split.Multiple);
+      for I in 1 .. String_Split.Slice_Count (Subs) loop
+         Collector.Append (Parse_Range (String_Split.Slice (Subs, I)));
       end loop;
-      return V;
-   end Read_Ranges;
+   end Parse_Line;
 end Day_2.Parser;

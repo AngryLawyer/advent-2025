@@ -7,6 +7,7 @@ use Trendy_Test.Assertions.Integer_Assertions;
 with Day_1.Parser;
 with Day_1.Safe;
 with Day_1.Rotation;
+with Types; use Types;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -24,12 +25,15 @@ package body Day_1.Tests is
          "R14",
          "L82"
       ];
-      Safe: Day_1.Safe.Safe;
+      Commands : Day_1.Parser.Rotation_Vectors.Vector;
+      Safe : Day_1.Safe.Safe;
    begin
       T.Register;
       Safe := Day_1.Safe.Init (50);
-      for C of Command_Array loop
-         Day_1.Safe.Apply (Safe, Day_1.Parser.Parse_Line (C));
+      Commands := Day_1.Parser.Parse (Command_Array);
+
+      for C of Commands loop
+         Day_1.Safe.Apply (Safe, C);
       end loop;
       Assert_EQ (T, Integer (Day_1.Safe.Position (Safe)), 32);
       Assert_EQ (T, (Day_1.Safe.Exact_Count (Safe)), 3);

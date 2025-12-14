@@ -24,7 +24,7 @@ package body Day_3.Banks is
 
    function Joltage (B : Bank; Safety_Override : Boolean) return U64 is
    begin
-      if Safety_Override = True then
+      if Safety_Override then
          return Joltage_Inner (B, 1, 11, 0);
       end if;
       return Joltage_Inner (B, 1, 1, 0);

@@ -13,6 +13,4 @@ executables = ["advent2025"]
 
 [[depends-on]]
 parse_args = "~0.9.0"
-
-[[depends-on]]
 optional = "~0.2.0"

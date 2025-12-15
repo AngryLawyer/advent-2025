@@ -40,6 +40,7 @@ package body Day_4.Parser is
       while not End_Of_File (F) loop
          V.Append (Get_Line (F));
       end loop;
+      Close (F);
       return Parse_Rack (V);
    end Read_Rack;
 end Day_4.Parser;

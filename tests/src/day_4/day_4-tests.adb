@@ -4,7 +4,6 @@ with Trendy_Test.Assertions.Integer_Assertions;
 
 use Trendy_Test.Assertions;
 use Trendy_Test.Assertions.Integer_Assertions;
-with Stringly_Asserts;
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Types; use Types;

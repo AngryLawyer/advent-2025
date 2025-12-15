@@ -1,7 +1,7 @@
+with Ada.Text_IO; use Ada.Text_IO;
+
 with Day_1.Safe;
 with Day_1.Parser;
-
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Day_1 is
    procedure Run is

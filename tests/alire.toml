@@ -15,5 +15,5 @@ executables = ["tests"]
 advent2025 = { path='..' }
 
 [[depends-on]]
-trendy_test = "~0.0.3"
 advent2025 = "*"
+trendy_test = "~0.0.3"

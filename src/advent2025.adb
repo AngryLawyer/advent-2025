@@ -4,6 +4,7 @@ with Day_2;
 with Day_3;
 with Day_4;
 with Day_5;
+with Day_6;
 
 procedure Advent2025 is
    AP : Argument_Parser;
@@ -15,7 +16,7 @@ begin
       Usage => "Display this help text"
       );
    AP.Append_Positional (
-      Make_Integer_Option (Default => 5, Min => 1, Max => 5), "day"
+      Make_Integer_Option (Default => 6, Min => 1, Max => 6), "day"
       );
 
    AP.Parse_Command_Line;
@@ -29,6 +30,7 @@ begin
          when 3 => Day_3.Run;
          when 4 => Day_4.Run;
          when 5 => Day_5.Run;
+         when 6 => Day_6.Run;
          when others => AP.Usage;
       end case;
    else

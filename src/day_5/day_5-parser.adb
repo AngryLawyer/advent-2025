@@ -1,6 +1,4 @@
-with Ada.Text_IO; use Ada.Text_IO;
 with Ranges; use Ranges;
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Day_5.Parser is
    procedure Insert_Range (Ranges : in out U64_Range_Vectors.Vector; My_Range : U64_Range) is

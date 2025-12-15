@@ -1,7 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Day_2.Product_Ranges;
 with Day_2.Parser;
-with Day_2.Numerics; use Day_2.Numerics;
 with Types; use Types;
 
 package body Day_2 is

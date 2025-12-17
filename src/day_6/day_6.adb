@@ -8,7 +8,7 @@ package body Day_6 is
       WS : Worksheet;
    begin
       WS := Read_Worksheet ("./data/day_6.txt");
-      Put_Line (WS'Image);
-      Put_Line (Column_Vectors.Vector'Image (To_Columns (WS)));
+      Put_Line ("Standard total is" & U64'Image (Solve (To_Columns (WS))));
+      Put_Line ("Rotated total is" & U64'Image (Solve (To_Rotated_Columns (WS))));
    end Run;
 end Day_6;

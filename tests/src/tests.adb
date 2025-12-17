@@ -8,6 +8,7 @@ with Day_2.Tests;
 with Day_3.Tests;
 with Day_4.Tests;
 with Day_5.Tests;
+with Day_6.Tests;
 
 procedure Tests is
 begin
@@ -17,5 +18,6 @@ begin
    Trendy_Test.Register (Day_3.Tests.All_Tests);
    Trendy_Test.Register (Day_4.Tests.All_Tests);
    Trendy_Test.Register (Day_5.Tests.All_Tests);
+   Trendy_Test.Register (Day_6.Tests.All_Tests);
    Trendy_Test.Reports.Print_Basic_Report (Trendy_Test.Run);
 end Tests;

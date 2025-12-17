@@ -57,4 +57,57 @@ package body Day_6.Worksheets is
       end loop;
       return V;
    end To_Columns;
+
+   function To_Rotated_Columns (WS : Worksheet) return Column_Vectors.Vector is
+      V : Column_Vectors.Vector;
+      Current_Column : Column;
+      First_Row : String := WS.Raw_Rows.First_Element;
+   begin
+      for I in reverse 1 .. First_Row'Length loop
+         declare
+            Agg : Unbounded_String;
+            Checked : Character := Character'Val(0);
+         begin
+            for C of WS.Raw_Rows loop
+               Checked := C (I);
+               if Checked = '+' or else Checked = '*' then
+                  Apply_Operation (Current_Column, "" & Checked);
+               elsif Checked /= ' ' then
+                  Append (Agg, Checked);
+               end if;
+            end loop;
+            Trim (Agg, Ada.Strings.Both);
+            if Length (Agg) > 0 then
+               Add_Value (Current_Column, To_String (Agg));
+            else
+               V.Append (Current_Column);
+               Current_Column := ([], Mult);
+            end if;
+         end;
+      end loop;
+      V.Append (Current_Column);
+      return V;
+   end To_Rotated_Columns;
+
+   function Solve (Columns : Column_Vectors.Vector) return U64 is
+      Total : U64 := 0;
+   begin
+      for C of Columns loop
+         declare
+            Sub : U64 := 0;
+         begin
+            for R of C.Numbers loop
+               if Sub = 0 then
+                  Sub := R;
+               elsif C.Operation = Add then
+                  Sub := Sub + R;
+               else
+                  Sub := Sub * R;
+               end if;
+            end loop;
+            Total := Total + Sub;
+         end;
+      end loop;
+      return Total;
+   end Solve;
 end Day_6.Worksheets;

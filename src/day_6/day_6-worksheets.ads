@@ -16,5 +16,7 @@ package Day_6.Worksheets is
    package Column_Vectors is new Ada.Containers.Vectors (Positive, Column);
 
    function To_Columns (WS : Worksheet) return Column_Vectors.Vector;
+   function To_Rotated_Columns (WS : Worksheet) return Column_Vectors.Vector;
+   function Solve (Columns : Column_Vectors.Vector) return U64;
 
 end Day_6.Worksheets;

@@ -11,8 +11,8 @@ package body Day_3.Parser is
       return B;
    end Parse_Bank;
 
-   procedure Parse_Line (Collector : in out Bank_Vectors.Vector; Line : String) is
+   procedure Parse_Line (Collector : in out Bank_Vectors.Vector; Raw : String; Line : Positive) is
    begin
-      Collector.Append (Parse_Bank (Line));
+      Collector.Append (Parse_Bank (Raw));
    end Parse_Line;
 end Day_3.Parser;

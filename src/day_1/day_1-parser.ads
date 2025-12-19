@@ -13,7 +13,7 @@ package Day_1.Parser is
    Parse_Error : exception;
 
    function Parse_Rotation (Line : String) return Day_1.Rotation.Rotation;
-   procedure Parse_Line (Collector : in out Rotation_Vectors.Vector; Line : String);
+   procedure Parse_Line (Collector : in out Rotation_Vectors.Vector; Raw: String; Line : Positive);
 
    package P is new Parsers (
       T => Rotation_Vectors.Vector,

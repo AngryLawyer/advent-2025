@@ -15,12 +15,12 @@ package body Day_5.Parser is
          end if;
       end loop;
       Ranges.Append (My_Range);
-   end;
+   end Insert_Range;
 
-   procedure Parse_Line (Collector : in out Database; Line : String) is
+   procedure Parse_Line (Collector : in out Database; Raw : String; Line : Positive) is
       My_Range : U64_Range;
    begin
-      if Line = "" then
+      if Raw = "" then
          if Collector.Done_Loading_Ranges then
             raise Parse_Error with "Encountered blank line twice";
          end if;
@@ -29,9 +29,9 @@ package body Day_5.Parser is
       end if;
 
       if Collector.Done_Loading_Ranges then
-         Collector.Ingredients.Append (U64'Value (Line));
+         Collector.Ingredients.Append (U64'Value (Raw));
       else
-         My_Range := Parse_Range (Line);
+         My_Range := Parse_Range (Raw);
          Insert_Range (Collector.Ranges, My_Range);
       end if;
    end Parse_Line;

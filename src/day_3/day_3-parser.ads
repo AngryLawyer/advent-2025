@@ -4,7 +4,7 @@ with Parsers;
 
 package Day_3.Parser is
    function Parse_Bank (Raw : String) return Bank;
-   procedure Parse_Line (Collector : in out Bank_Vectors.Vector; Line : String);
+   procedure Parse_Line (Collector : in out Bank_Vectors.Vector; Raw : String; Line : Positive);
 
    package P is new Parsers (
       T => Bank_Vectors.Vector,

@@ -5,6 +5,9 @@ with Trendy_Test.Assertions.Integer_Assertions;
 use Trendy_Test.Assertions;
 use Trendy_Test.Assertions.Integer_Assertions;
 
+with Day_7.Parser; use Day_7.Parser;
+with Day_7.Manifolds; use Day_7.Manifolds;
+
 with Types; use Types;
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -29,8 +32,11 @@ package body Day_7.Tests is
    ];
 
    procedure Test_Example (T : in out Trendy_Test.Operation'Class) is
+      M : Manifold;
    begin
       T.Register;
+      M := Parse (Raw);
+      Put_Line (M'Image);
    end Test_Example;
 
    procedure Test_Example_Extended (T : in out Trendy_Test.Operation'Class) is

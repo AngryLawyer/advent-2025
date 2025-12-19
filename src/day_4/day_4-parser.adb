@@ -1,4 +1,5 @@
 with Ada.Text_IO; use Ada.Text_IO;
+with Coordinates; use Coordinates;
 
 package body Day_4.Parser is
    function Parse_Rack (Raw : String_Vectors.Vector) return Rack is

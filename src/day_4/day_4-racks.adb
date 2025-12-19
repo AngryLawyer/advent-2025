@@ -1,11 +1,6 @@
 with Ada.Strings.Hash;
 
 package body Day_4.Racks is
-   function Hash (C : Coordinate) return Hash_Type is
-   begin
-      return Ada.Strings.Hash (C'Image);
-   end Hash;
-
    function Is_Accessible (R : Rack; X : Positive; Y : Positive) return Boolean is
       Adjacent_Count : Natural := 0;
       Args_As_Coordinate : constant Coordinate := (X, Y);

@@ -5,7 +5,7 @@ with Day_6.Worksheets; use Day_6.Worksheets;
 package Day_6.Parser is
    Parse_Error : exception;
 
-   procedure Parse_Line (Collector : in out Worksheet; Line : String);
+   procedure Parse_Line (Collector : in out Worksheet; Raw : String; Line : Positive);
 
    package P is new Parsers (
       T => Worksheet,

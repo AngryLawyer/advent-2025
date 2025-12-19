@@ -5,7 +5,7 @@ with Parsers;
 package Day_5.Parser is
    Parse_Error : exception;
 
-   procedure Parse_Line (Collector : in out Database; Line : String);
+   procedure Parse_Line (Collector : in out Database; Raw : String; Line : Positive);
 
    package P is new Parsers (
       T => Database,

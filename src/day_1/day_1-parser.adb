@@ -22,9 +22,9 @@ package body Day_1.Parser is
       return (Dir, Amount);
    end Parse_Rotation;
 
-   procedure Parse_Line (Collector : in out Rotation_Vectors.Vector; Line : String) is
+   procedure Parse_Line (Collector : in out Rotation_Vectors.Vector; Raw: String; Line : Positive) is
    begin
-      Collector.Append (Parse_Rotation (Line));
+      Collector.Append (Parse_Rotation (Raw));
    end Parse_Line;
 
 end Day_1.Parser;

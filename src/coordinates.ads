@@ -1,4 +1,5 @@
 with Ada.Containers.Hashed_Sets;
+with Ada.Containers.Vectors;
 with Ada.Containers; use Ada.Containers;
 
 package Coordinates is
@@ -8,6 +9,9 @@ package Coordinates is
    end record;
 
    function Hash (C : Coordinate) return Hash_Type;
+
+   package Coordinate_Vectors is new
+      Ada.Containers.Vectors (Positive, Coordinate);
 
    package Coordinate_Sets is new
       Ada.Containers.Hashed_Sets

@@ -6,6 +6,11 @@ with Day_4;
 with Day_5;
 with Day_6;
 with Day_7;
+with Day_8;
+with Day_9;
+with Day_10;
+with Day_11;
+with Day_12;
 
 procedure Advent2025 is
    AP : Argument_Parser;

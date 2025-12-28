@@ -1,5 +1,3 @@
-with Ada.Text_IO;
-
 with Trendy_Test.Reports;
 
 with Ranges.Tests;

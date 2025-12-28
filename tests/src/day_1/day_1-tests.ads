@@ -1,4 +1,3 @@
-with Ada.Containers.Indefinite_Vectors;
 with Trendy_Test;
 
 package Day_1.Tests is

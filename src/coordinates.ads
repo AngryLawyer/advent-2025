@@ -8,10 +8,19 @@ package Coordinates is
       Y : Positive;
    end record;
 
+   type Coordinate_3D is record
+      X : Natural;
+      Y : Natural;
+      Z : Natural;
+   end record;
+
    function Hash (C : Coordinate) return Hash_Type;
 
    package Coordinate_Vectors is new
       Ada.Containers.Vectors (Positive, Coordinate);
+
+   package Coordinate_3D_Vectors is new
+      Ada.Containers.Vectors (Positive, Coordinate_3D);
 
    package Coordinate_Sets is new
       Ada.Containers.Hashed_Sets

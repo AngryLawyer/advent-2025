@@ -9,8 +9,6 @@ with Day_1.Safe;
 with Day_1.Rotation;
 with Types; use Types;
 
-with Ada.Text_IO; use Ada.Text_IO;
-
 package body Day_1.Tests is
    procedure Test_Example (T : in out Trendy_Test.Operation'Class) is
       Command_Array : constant String_Vectors.Vector := [

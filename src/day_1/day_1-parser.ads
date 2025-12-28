@@ -10,8 +10,6 @@ package Day_1.Parser is
         Element_Type => Day_1.Rotation.Rotation,
         "="          => Day_1.Rotation."=");
 
-   Parse_Error : exception;
-
    function Parse_Rotation (Line : String) return Day_1.Rotation.Rotation;
    procedure Parse_Line (Collector : in out Rotation_Vectors.Vector; Raw: String; Line : Positive);
 
@@ -19,6 +17,8 @@ package Day_1.Parser is
       T => Rotation_Vectors.Vector,
       Parse_Line => Parse_Line
    );
+
+   Parse_Error : exception renames P.Parse_Error;
 
    function Parse (Raw : String_Vectors.Vector) return Rotation_Vectors.Vector renames P.Parse;
    function Read_Directions (Path : String) return Rotation_Vectors.Vector renames P.Load;

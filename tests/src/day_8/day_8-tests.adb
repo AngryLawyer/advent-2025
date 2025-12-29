@@ -1,4 +1,5 @@
 with Trendy_Test.Assertions.Discrete;
+with Trendy_Test.Assertions.Integer_Assertions; use Trendy_Test.Assertions.Integer_Assertions;
 with Day_8.Circuits; use Day_8.Circuits;
 with Day_8.Parser; use Day_8.Parser;
 with Types; use Types;
@@ -37,7 +38,7 @@ package body Day_8.Tests is
    begin
       T.Register;
       C := Parse (Raw_Coordinates);
-      Assert_EQ (T, Calculate_Three_largest (C, 10), 40);
+      Assert_EQ (T, Calculate_Three_Largest (C, 10), 40);
    end Test_Example;
    function All_Tests return Trendy_Test.Test_Group is
    begin

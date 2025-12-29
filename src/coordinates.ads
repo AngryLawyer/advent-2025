@@ -15,6 +15,7 @@ package Coordinates is
    end record;
 
    function Hash (C : Coordinate) return Hash_Type;
+   function Hash (C : Coordinate_3D) return Hash_Type;
 
    package Coordinate_Vectors is new
       Ada.Containers.Vectors (Positive, Coordinate);

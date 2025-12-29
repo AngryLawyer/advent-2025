@@ -5,4 +5,9 @@ package body Coordinates is
    begin
       return Ada.Strings.Hash (C'Image);
    end Hash;
+
+   function Hash (C : Coordinate_3D) return Hash_Type is
+   begin
+      return Ada.Strings.Hash (C'Image);
+   end Hash;
 end Coordinates;

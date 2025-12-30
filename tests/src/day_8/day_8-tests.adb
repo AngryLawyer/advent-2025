@@ -40,11 +40,21 @@ package body Day_8.Tests is
       C := Parse (Raw_Coordinates);
       Assert_EQ (T, Calculate_Three_Largest (C, 10), 40);
    end Test_Example;
+
+   procedure Test_Example_Extended (T : in out Trendy_Test.Operation'Class) is
+      C : Circuit;
+   begin
+      T.Register;
+      C := Parse (Raw_Coordinates);
+      Assert_EQ (T, Calculate_Extension_Cable (C), 25272);
+   end Test_Example_Extended;
+
    function All_Tests return Trendy_Test.Test_Group is
    begin
       return
          [
-            Test_Example'Access
+            Test_Example'Access,
+            Test_Example_Extended'Access
          ];
    end All_Tests;
 end Day_8.Tests;

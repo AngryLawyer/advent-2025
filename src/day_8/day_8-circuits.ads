@@ -33,4 +33,6 @@ package Day_8.Circuits is
    );
 
    function Calculate_Three_Largest (C : Circuit; Connections : Positive) return Natural;
+
+   function Calculate_Extension_Cable (C : Circuit) return U64;
 end Day_8.Circuits;

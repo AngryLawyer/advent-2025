@@ -1,4 +1,5 @@
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body Day_8.Circuits is
    use Ada.Containers;
@@ -7,6 +8,29 @@ package body Day_8.Circuits is
    begin
       return A.Distance_Squared < B.Distance_Squared;
    end "<";
+
+   function Print_Bucket (B : Node_Sets.Set) return String is
+      Buffer : Unbounded_String := To_Unbounded_String ("[");
+      Has_First : Boolean := False;
+   begin
+      for Node of B loop
+         if not Has_First then
+            Has_First := True;
+         else
+            Append (Buffer, ",");
+         end if;
+         Append (Buffer, To_String (Node));
+      end loop;
+      Append (Buffer, "]");
+      return To_String (Buffer);
+   end Print_Bucket;
+
+   procedure Print_Buckets (B : Node_Set_Vectors.Vector) is
+   begin
+      for Bucket of B loop
+         Put_Line (Print_Bucket (Bucket));
+      end loop;
+   end Print_Buckets;
 
    function Distance_Squared (A : Coordinate_3D; B : Coordinate_3D) return U64 is
       X : I64;
@@ -67,28 +91,32 @@ package body Day_8.Circuits is
                New_Bucket : Node_Sets.Set;
             begin
                New_Bucket := Buckets (A_Bucket) or Buckets (B_Bucket);
-               Buckets.Delete (A_Bucket);
-               Buckets.Delete (B_Bucket);
+               if To_Index (A_Bucket) > To_Index (B_Bucket) then
+                  Buckets.Delete (A_Bucket);
+                  Buckets.Delete (B_Bucket);
+               elsif To_Index (A_Bucket) < To_Index (B_Bucket) then
+                  Buckets.Delete (B_Bucket);
+                  Buckets.Delete (A_Bucket);
+               else
+                  Buckets.Delete (A_Bucket);
+               end if;
                Buckets.Append (New_Bucket);
-               Put_Line ("JOIN!");
             end;
          else
-            Put_Line ("SKIP!");
+            --  Skip
+            null;
          end if;
       elsif A_Bucket /= Node_Set_Vectors.No_Element then
          --  Left has a bucket, right doesn't
          Buckets (A_Bucket).Insert (C.B);
-         Put_Line ("LEFT BUCKET!");
       elsif B_Bucket /= Node_Set_Vectors.No_Element then
          Buckets (B_Bucket).Insert (C.A);
-         Put_Line ("RIGHT BUCKET!");
       else
          --  Neither has a bucket, create a new one and append
          declare
             New_Bucket : constant Node_Sets.Set := [C.A, C.B];
          begin
             Buckets.Append (New_Bucket);
-            Put_Line ("NEW BUCKET!");
          end;
       end if;
    end Rebucket;
@@ -117,13 +145,12 @@ package body Day_8.Circuits is
          Connection_Count := Connection_Count + 1;
       end loop;
       declare
-         Sizes : Natural_Vectors.Vector := Bucket_Sizes (Buckets);
+         Sizes : constant Natural_Vectors.Vector := Bucket_Sizes (Buckets);
          Bucket_1_Size : Natural := 1;
          Bucket_2_Size : Natural := 1;
          Bucket_3_Size : Natural := 1;
-         L : Natural := Natural (Sizes.Length);
+         L : constant Natural := Natural (Sizes.Length);
       begin
-         Put_Line (Sizes'Image);
          if L >= 3 then
             Bucket_3_Size := Sizes (3);
          end if;
@@ -136,4 +163,18 @@ package body Day_8.Circuits is
          return Bucket_1_Size * Bucket_2_Size * Bucket_3_Size;
       end;
    end Calculate_Three_Largest;
+
+   function Calculate_Extension_Cable (C : Circuit) return U64 is
+      Ordered : Ordered_Connections.Set;
+      Buckets : Node_Set_Vectors.Vector;
+   begin
+      Ordered := Distances_Squared (C);
+      for Con of Ordered loop
+         Rebucket (Buckets, Con);
+         if Buckets.Length = 1 and then Buckets (1).Length = C.Nodes.Length then
+            return U64 (Con.A.X) * U64 (Con.B.X);
+         end if;
+      end loop;
+      return 0;
+   end Calculate_Extension_Cable;
 end Day_8.Circuits;

@@ -17,6 +17,8 @@ package Coordinates is
    function Hash (C : Coordinate) return Hash_Type;
    function Hash (C : Coordinate_3D) return Hash_Type;
 
+   function To_String (C : Coordinate_3D) return String;
+
    package Coordinate_Vectors is new
       Ada.Containers.Vectors (Positive, Coordinate);
 

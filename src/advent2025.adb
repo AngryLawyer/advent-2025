@@ -22,7 +22,7 @@ begin
       Usage => "Display this help text"
       );
    AP.Append_Positional (
-      Make_Integer_Option (Default => 8, Min => 1, Max => 8), "day"
+      Make_Integer_Option (Default => 9, Min => 1, Max => 9), "day"
       );
 
    AP.Parse_Command_Line;
@@ -39,6 +39,7 @@ begin
          when 6 => Day_6.Run;
          when 7 => Day_7.Run;
          when 8 => Day_8.Run;
+         when 9 => Day_9.Run;
          when others => AP.Usage;
       end case;
    else

@@ -31,4 +31,21 @@ package Coordinates is
           Hash => Hash,
           Equivalent_Elements => "=");
 
+   type Line is record
+      Start_Coord : Coordinate;
+      End_Coord : Coordinate;
+   end record;
+
+   package Line_Vectors is new
+      Ada.Containers.Vectors (Positive, Line);
+
+   type Rect is record
+      X1 : Positive;
+      Y1 : Positive;
+      X2 : Positive;
+      Y2 : Positive;
+   end record;
+
+   function Make_Rect (A : Coordinate; B : Coordinate) return Rect;
+
 end Coordinates;

@@ -40,46 +40,74 @@ package body Day_9.Tests is
       Assert_EQ (T, U64 (L.Length), 8);
    end Test_Lines;
 
-   procedure Test_Example_Extended (T : in out Trendy_Test.Operation'Class) is
-      F : Floor;
+   procedure Test_Line_Intersects_Line (T : in out Trendy_Test.Operation'Class) is
+      type Line_Pair is array (1 .. 2) of Line;
+      Parallel_Pairs : constant array (1 .. 4) of Line_Pair := [
+         [((7, 1), (11, 1)), ((7, 1), (11, 1))],
+         [((6, 1), (12, 1)), ((7, 1), (11, 1))],
+         [((8, 1), (10, 1)), ((7, 1), (11, 1))],
+         [((7, 2), (11, 2)), ((7, 1), (11, 1))]
+      ];
+      Nonintersecting_Pairs : constant array (1 .. 4) of Line_Pair := [
+         --  Ends
+         [((2, 2), (4, 2)), ((1, 1), (1, 3))],
+         [((2, 2), (4, 2)), ((2, 1), (2, 3))],
+         --  Body
+         [((2, 2), (4, 2)), ((3, 1), (3, 2))],
+         [((2, 2), (4, 2)), ((3, 2), (3, 3))]
+      ];
+      Intersecting_Pairs : constant array (1 .. 5) of Line_Pair := [
+         -- Cross
+         [((2, 2), (4, 2)), ((3, 1), (3, 3))],
+         -- Overlap on bound
+         [((2, 2), (4, 2)), ((1, 2), (3, 2))],
+         [((2, 2), (4, 2)), ((3, 2), (5, 2))],
+         -- Overlap on both bounds
+         [((2, 2), (4, 2)), ((1, 2), (5, 2))],
+         [((1, 2), (3, 2)), ((2, 2), (4, 2))]
+      ];
    begin
       T.Register;
-      F := Parse (Raw_Coordinates);
-      Assert_EQ (T, Largest_Area_In_Lines (F), 24);
-   end Test_Example_Extended;
+      --  Parallel lines never intersect
+      for P of Parallel_Pairs loop
+         Assert (T, not Line_Intersects (P (1), P (2)));
+         Assert (T, not Line_Intersects (Rotate_Line (P (1)), Rotate_Line (P (2))));
+      end loop;
+      for P of Nonintersecting_Pairs loop
+         Assert (T, not Line_Intersects (P (1), P (2)));
+         Assert (T, not Line_Intersects (Rotate_Line (P (1)), Rotate_Line (P (2))));
+      end loop;
+      for P of Intersecting_Pairs loop
+         Assert (T, Line_Intersects (P (1), P (2)));
+         Assert (T, Line_Intersects (Rotate_Line (P (1)), Rotate_Line (P (2))));
+      end loop;
+   end Test_Line_Intersects_Line;
 
-   procedure Test_Line_Intersects (T : in out Trendy_Test.Operation'Class) is
-      R : Rect := Make_Rect ((3, 3), (4, 4));
+   procedure Test_Line_Intersects_Rect (T : in out Trendy_Test.Operation'Class) is
+      R : constant Rect := Make_Rect ((7, 1), (11, 7));
+      Good_Lines : constant array (1 .. 7) of Line := [
+         ((7, 1), (11, 1)),
+         ((11, 1), (11, 7)),
+         ((9, 7), (11, 7)),
+         ((9, 5), (9, 7)),
+         ((2, 3), (2, 5)),
+         ((2, 3), (7, 3)),
+         ((7, 1), (7, 3))
+      ]; 
+      Bad_Lines : constant array (1 .. 1) of Line := [
+         ((2, 5), (9, 5))
+      ];
    begin
       T.Register;
-      Assert (T, not Line_Intersects (R, ((1, 1), (2, 1))));
-      Assert (T, not Line_Intersects (R, ((1, 1), (1, 2))));
 
-      Assert (T, not Line_Intersects (R, ((3, 1), (3, 2))));
-      Assert (T, not Line_Intersects (R, ((3, 2), (4, 2))));
+      for G of Good_Lines loop
+         Assert (T, not Line_Intersects (R, G));
+      end loop;
 
-      Assert (T, not Line_Intersects (R, ((1, 3), (2, 3))));
-      Assert (T, not Line_Intersects (R, ((2, 3), (2, 4))));
-
-      Assert (T, not Line_Intersects (R, ((5, 3), (6, 3))));
-      Assert (T, not Line_Intersects (R, ((5, 3), (5, 4))));
-
-      Assert (T, not Line_Intersects (R, ((3, 5), (4, 5))));
-      Assert (T, not Line_Intersects (R, ((3, 5), (3, 6))));
-
-      --  Inside
-      Assert (T, not Line_Intersects (R, ((3, 3), (4, 3))));
-      Assert (T, not Line_Intersects (R, ((3, 3), (3, 4))));
-
-      -- Intersection
-      Assert (T, Line_Intersects (R, ((2, 3), (3, 3))));
-      Assert (T, Line_Intersects (R, ((3, 2), (3, 4))));
-      Assert (T, Line_Intersects (R, ((4, 4), (4, 5))));
-      Assert (T, Line_Intersects (R, ((4, 4), (5, 4))));
-
-      -- Actual Values
-      Assert (T, not Line_Intersects (Make_Rect ((2, 3), (9, 5)), ((7, 1), (11, 1))));
-   end Test_Line_Intersects;
+      for B of Bad_Lines loop
+         Assert (T, Line_Intersects (R, B));
+      end loop;
+   end Test_Line_Intersects_Rect;
 
    procedure Test_Any_Line_Intersects_Rect (T : in out Trendy_Test.Operation'Class) is
       F : Floor;
@@ -88,18 +116,29 @@ package body Day_9.Tests is
       T.Register;
       F := Parse (Raw_Coordinates);
       Lines := Get_Lines (F);
+      Assert (T, Any_Line_Intersects_Rect (Make_Rect ((7, 1), (11, 7)), Lines));
+      Assert (T, Any_Line_Intersects_Rect (Make_Rect ((2, 3), (9, 7)), Lines));
       Assert (T, not Any_Line_Intersects_Rect (Make_Rect ((2, 3), (9, 5)), Lines));
    end Test_Any_Line_Intersects_Rect;
+
+   procedure Test_Example_Extended (T : in out Trendy_Test.Operation'Class) is
+      F : Floor;
+   begin
+      T.Register;
+      F := Parse (Raw_Coordinates);
+      Assert_EQ (T, Largest_Area_In_Lines (F), 24);
+   end Test_Example_Extended;
 
    function All_Tests return Trendy_Test.Test_Group is
    begin
       return
          [
-            Test_Example'Access,
-            Test_Lines'Access,
-            -- Test_Line_Intersects'Access,
-            Test_Any_Line_Intersects_Rect'Access --,
-            -- Test_Example_Extended'Access
+            --Test_Example'Access,
+            --Test_Lines'Access,
+            --Test_Line_Intersects_Line'Access
+            --Test_Line_Intersects_Rect'Access,
+            Test_Any_Line_Intersects_Rect'Access
+            --Test_Example_Extended'Access
          ];
    end All_Tests;
 end Day_9.Tests;

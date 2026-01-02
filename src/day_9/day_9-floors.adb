@@ -26,10 +26,7 @@ package body Day_9.Floors is
       with Post => (Get_Line'Result.Start_Coord.X = Get_Line'Result.End_Coord.X or else Get_Line'Result.Start_Coord.Y = Get_Line'Result.End_Coord.Y) and then Get_Line'Result.Start_Coord.X <= Get_Line'Result.End_Coord.X and then Get_Line'Result.Start_Coord.Y <= Get_Line'Result.End_Coord.Y --  Lines are always axis-aligned
    is
    begin
-      if A.X < B.X or else A.Y < B.Y then
-         return (A, B);
-      end if;
-      return (B, A);
+      return Make_Line (A, B);
    end Get_Line;
 
    function Get_Line_Axis (L : Line) return Line_Axis is
@@ -93,38 +90,87 @@ package body Day_9.Floors is
       return Lines;
    end Get_Lines;
 
-   function Line_Intersects (R : Rect; L : Line) return Boolean is
-      Axis : constant Line_Axis := Get_Line_Axis (L);
+   function Line_Intersects (A : Line; B : Line) return Boolean is
+      Axis : constant Line_Axis := Get_Line_Axis (A);
+      A_Axis : Positive;
+      A_Start : Positive;
+      A_End : Positive;
+      B_Axis : Positive;
+      B_Start : Positive;
+      B_End : Positive;
    begin
+      if Axis = Get_Line_Axis (B) then
+         case Axis is
+            when Horizontal =>
+               A_Start := A.Start_Coord.X;
+               A_End := A.End_Coord.X;
+               A_Axis := A.Start_Coord.Y;
+
+               B_Start := B.Start_Coord.X;
+               B_End := B.End_Coord.X;
+               B_Axis := B.Start_Coord.Y;
+            when Vertical =>
+               A_Start := A.Start_Coord.Y;
+               A_End := A.End_Coord.Y;
+               A_Axis := A.Start_Coord.X;
+
+               B_Start := B.Start_Coord.Y;
+               B_End := B.End_Coord.Y;
+               B_Axis := B.Start_Coord.X;
+         end case;
+         if A_Axis /= B_Axis then
+            return False;
+         end if;
+         Ada.Text_IO.Put_Line ("Here we go " & To_String (A) & " " & To_String (B));
+         if (A_Start >= B_Start and then A_End <= B_End) or else (B_Start >= A_Start and then B_End <= A_End) then
+            return False;
+         end if;
+         return True;
+      end if;
+      -- Ada.Text_IO.Put_Line (To_String (A) & ", " & To_String (B));
       case Axis is
          when Horizontal =>
-            -- Not on the same line as our shape, so skip
-            if (L.Start_Coord.Y < R.Y1 or else L.Start_Coord.Y > R.Y2) then
-               return False;
-            end if;
-            -- Fully within
-            if L.Start_Coord.X >= R.X1 and then L.End_Coord.X <= R.X2 then
-               return False;
-            end if;
-            return (L.End_Coord.X >= R.X1) and then (L.Start_Coord.X <= R.X2);
+            A_Start := A.Start_Coord.X;
+            A_End := A.End_Coord.X;
+            A_Axis := A.Start_Coord.Y;
+
+            B_Start := B.Start_Coord.Y;
+            B_End := B.End_Coord.Y;
+            B_Axis := B.Start_Coord.X;
          when Vertical =>
-            -- Not on the same line as our shape, so skip
-            if (L.Start_Coord.X < R.X1 or else L.Start_Coord.X > R.X2) then
-               return False;
-            end if;
-            -- Fully within
-            if L.Start_Coord.Y >= R.Y1 and then L.End_Coord.Y <= R.Y2 then
-               return False;
-            end if;
-            return (L.End_Coord.Y >= R.Y1) and then (L.Start_Coord.Y <= R.Y2);
+            A_Start := A.Start_Coord.Y;
+            A_End := A.End_Coord.Y;
+            A_Axis := A.Start_Coord.X;
+
+            B_Start := B.Start_Coord.X;
+            B_End := B.End_Coord.X;
+            B_Axis := B.Start_Coord.Y;
       end case;
+      -- Ada.Text_IO.Put_Line (A_Start'Image & " " & A_End'Image & " crossed at " & B_Axis'Image);
+      return not (B_Axis <= A_Start or else B_Axis >= A_End or else A_Axis <= B_Start or else A_Axis >= B_End);
+   end Line_Intersects;
+
+   function Line_Intersects (R : Rect; L : Line) return Boolean is
+   begin
+      Ada.Text_IO.Put_Line ("Testing " & To_string (L));
+      -- Check if the line points are on opposite sides of the rect
+      if L.Start_Coord.X < R.X1 and then L.End_Coord.X > R.X2 and then L.Start_Coord.Y >= R.Y1 and then L.End_Coord.Y <= R.Y2 then
+         return True;
+      elsif L.Start_Coord.Y < R.Y1 and then L.End_Coord.Y > R.Y2 and then L.Start_Coord.X >= R.X1 and then L.End_Coord.X <= R.X2 then
+         return True;
+      -- Check if any line points are fully within
+      elsif Fully_Within (R, L.Start_Coord) or else Fully_Within (R, L.End_Coord) then
+         return True;
+      end if;
+      return False;
    end Line_Intersects;
 
    function Any_Line_Intersects_Rect (R : Rect; Lines : Line_Vectors.Vector) return Boolean is
    begin
+      Ada.Text_IO.Put_Line ("Testing rect " & R'Image);
       for L of Lines loop
          if Line_Intersects (R, L) then
-            Ada.Text_IO.Put_Line (R'Image & " " & L'Image);
+            Ada.Text_IO.Put_Line ("Intersects");
             return True;
          end if;
       end loop;
@@ -142,12 +188,14 @@ package body Day_9.Floors is
                A : constant Coordinate := F.Tiles.Element (I);
                B : constant Coordinate := F.Tiles.Element (J);
                R : constant Rect := Make_Rect (A, B);
-               Area : U64;
+               New_Area : U64;
             begin
                if not Any_Line_Intersects_Rect (R, Lines) then
-                  Area := U64 (abs (A.X - B.X) + 1) * U64 (abs (A.Y - B.Y) + 1);
-                  if Area > Best_Area then
-                     Best_Area := Area;
+                  Ada.Text_IO.Put_Line (R'Image & " has no intersections");
+                  New_Area := Area (R);
+                  if New_Area > Best_Area then
+                     Ada.Text_IO.Put_Line (R'Image & " chosten due to area " & New_Area'Image & " larger than " & Best_Area'Image);
+                     Best_Area := New_Area;
                   end if;
                end if;
             end;

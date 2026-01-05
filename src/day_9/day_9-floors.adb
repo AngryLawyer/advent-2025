@@ -23,7 +23,9 @@ package body Day_9.Floors is
    end Largest_Area;
 
    function Get_Line (A : Coordinate; B : Coordinate) return Line
-      with Post => (Get_Line'Result.Start_Coord.X = Get_Line'Result.End_Coord.X or else Get_Line'Result.Start_Coord.Y = Get_Line'Result.End_Coord.Y) and then Get_Line'Result.Start_Coord.X <= Get_Line'Result.End_Coord.X and then Get_Line'Result.Start_Coord.Y <= Get_Line'Result.End_Coord.Y --  Lines are always axis-aligned
+      with Post => (Get_Line'Result.Start_Coord.X = Get_Line'Result.End_Coord.X or else Get_Line'Result.Start_Coord.Y = Get_Line'Result.End_Coord.Y) and then
+            Get_Line'Result.Start_Coord.X <= Get_Line'Result.End_Coord.X and then
+            Get_Line'Result.Start_Coord.Y <= Get_Line'Result.End_Coord.Y --  Lines are always axis-aligned
    is
    begin
       return Make_Line (A, B);
@@ -100,32 +102,8 @@ package body Day_9.Floors is
       B_End : Positive;
    begin
       if Axis = Get_Line_Axis (B) then
-         case Axis is
-            when Horizontal =>
-               A_Start := A.Start_Coord.X;
-               A_End := A.End_Coord.X;
-               A_Axis := A.Start_Coord.Y;
-
-               B_Start := B.Start_Coord.X;
-               B_End := B.End_Coord.X;
-               B_Axis := B.Start_Coord.Y;
-            when Vertical =>
-               A_Start := A.Start_Coord.Y;
-               A_End := A.End_Coord.Y;
-               A_Axis := A.Start_Coord.X;
-
-               B_Start := B.Start_Coord.Y;
-               B_End := B.End_Coord.Y;
-               B_Axis := B.Start_Coord.X;
-         end case;
-         if A_Axis /= B_Axis then
-            return False;
-         end if;
-         Ada.Text_IO.Put_Line ("Here we go " & To_String (A) & " " & To_String (B));
-         if (A_Start >= B_Start and then A_End <= B_End) or else (B_Start >= A_Start and then B_End <= A_End) then
-            return False;
-         end if;
-         return True;
+         -- Lines matching an axis never intersect
+         return False;
       end if;
       -- Ada.Text_IO.Put_Line (To_String (A) & ", " & To_String (B));
       case Axis is
@@ -147,7 +125,10 @@ package body Day_9.Floors is
             B_Axis := B.Start_Coord.Y;
       end case;
       -- Ada.Text_IO.Put_Line (A_Start'Image & " " & A_End'Image & " crossed at " & B_Axis'Image);
-      return not (B_Axis <= A_Start or else B_Axis >= A_End or else A_Axis <= B_Start or else A_Axis >= B_End);
+      return not (B_Axis < A_Start or else
+                  B_Axis > A_End or else
+                  A_Axis < B_Start or else
+                  A_Axis > B_End);
    end Line_Intersects;
 
    function Line_Intersects (R : Rect; L : Line) return Boolean is
@@ -177,11 +158,25 @@ package body Day_9.Floors is
       return False;
    end Any_Line_Intersects_Rect;
 
+   function Largest_X_Bound (Lines : Line_Vectors.Vector) return Positive is
+      Largest_X : Positive := 1;
+   begin
+      for Line of Lines loop
+         if Get_Line_Axis (Line) = Vertical and Line.Start_Coord.X > Largest_X then
+            Largest_X := Line.Start_Coord.X;
+         end if;
+      end loop;
+      return Largest_X;
+   end Largest_X_Bound;
+
    function Largest_Area_In_Lines (F : Floor) return U64 is
       Best_Area : U64 := 0;
       Lines : Line_Vectors.Vector;
+      Largest_X : Positive := 1;
    begin
       Lines := Get_Lines (F);
+      Largest_X := Largest_X_Bound (Lines);
+
       for I in F.Tiles.First_Index .. (F.Tiles.Last_Index - 1) loop
          for J in I + 1 .. F.Tiles.Last_Index loop
             declare
@@ -190,7 +185,7 @@ package body Day_9.Floors is
                R : constant Rect := Make_Rect (A, B);
                New_Area : U64;
             begin
-               if not Any_Line_Intersects_Rect (R, Lines) then
+               if Inside_Shape (Lines, R, Largest_X) then
                   Ada.Text_IO.Put_Line (R'Image & " has no intersections");
                   New_Area := Area (R);
                   if New_Area > Best_Area then
@@ -203,4 +198,32 @@ package body Day_9.Floors is
       end loop;
       return Best_Area;
    end Largest_Area_In_Lines;
+
+   function Inside_Shape (Lines : Line_Vectors.Vector; C : Coordinate; Max_X : Positive) return Boolean is
+      Traceline : constant Line := Make_Line (C, (Max_X + 1, C.Y));
+      Total_Intersections : Natural := 0;
+   begin
+      --  If we project from the point horizontally to just outside the largest X pos of the shape, we can determine if we're inside by seeing if we have an odd number of intersections
+      for Line of Lines loop
+         if Line_Intersects (Traceline, Line) then
+            Total_Intersections := Total_Intersections + 1;
+         end if;
+      end loop;
+      Ada.Text_IO.Put_Line ("Total intersections" & Total_Intersections'Image);
+      return (Total_Intersections mod 2 = 1);
+   end Inside_Shape;
+
+   function Inside_Shape (Lines : Line_Vectors.Vector; R : Rect; Max_X : Positive) return Boolean is
+      Corners : constant array (1 .. 4) of Coordinate := [(R.X1, R.Y1), (R.X2, R.Y1), (R.X2, R.Y2), (R.X1, R.Y2)];
+   begin
+      if Any_Line_Intersects_Rect (R, Lines) then
+         return False;
+      end if;
+      for C of Corners loop
+         if not Inside_Shape (Lines, C, Max_X) then
+            return False;
+         end if;
+      end loop;
+      return True;
+   end Inside_Shape;
 end Day_9.Floors;

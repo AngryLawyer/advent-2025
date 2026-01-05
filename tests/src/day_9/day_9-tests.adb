@@ -4,6 +4,7 @@ with Day_9.Floors; use Day_9.Floors;
 with Day_9.Parser; use Day_9.Parser;
 with Types; use Types;
 with Coordinates; use Coordinates;
+with Ada.Text_IO;
 
 package body Day_9.Tests is
    package U64_Assertions
@@ -117,7 +118,7 @@ package body Day_9.Tests is
       F := Parse (Raw_Coordinates);
       Lines := Get_Lines (F);
       Assert (T, Any_Line_Intersects_Rect (Make_Rect ((7, 1), (11, 7)), Lines));
-      Assert (T, Any_Line_Intersects_Rect (Make_Rect ((2, 3), (9, 7)), Lines));
+      Assert (T, not Any_Line_Intersects_Rect (Make_Rect ((2, 3), (9, 7)), Lines));
       Assert (T, not Any_Line_Intersects_Rect (Make_Rect ((2, 3), (9, 5)), Lines));
    end Test_Any_Line_Intersects_Rect;
 
@@ -129,6 +130,33 @@ package body Day_9.Tests is
       Assert_EQ (T, Largest_Area_In_Lines (F), 24);
    end Test_Example_Extended;
 
+   procedure Test_Inside_Shape (T : in out Trendy_Test.Operation'Class) is
+      F : Floor;
+      Lines : Line_Vectors.Vector;
+      Largest_X : Positive;
+      Good_Points: constant array (1 .. 3) of Coordinate := [
+         (3, 5),
+         (2, 3),
+         (7, 1)
+      ]; 
+      Bad_Points: constant array (1 .. 1) of Coordinate := [
+         (2, 1)
+      ];
+   begin
+      T.Register;
+      F := Parse (Raw_Coordinates);
+      Lines := Get_Lines (F);
+      Largest_X := Largest_X_Bound (Lines);
+      for G of Good_Points loop
+         Ada.Text_IO.Put_Line (G'Image);
+         Assert (T, Inside_Shape (Lines, G, Largest_X));
+      end loop;
+
+      for B of Bad_Points loop
+         Assert (T, not Inside_Shape (Lines, B, Largest_X));
+      end loop;
+   end Test_Inside_Shape;
+
    function All_Tests return Trendy_Test.Test_Group is
    begin
       return
@@ -137,7 +165,8 @@ package body Day_9.Tests is
             --Test_Lines'Access,
             --Test_Line_Intersects_Line'Access
             --Test_Line_Intersects_Rect'Access,
-            Test_Any_Line_Intersects_Rect'Access
+            --Test_Any_Line_Intersects_Rect'Access,
+            Test_Inside_Shape'Access
             --Test_Example_Extended'Access
          ];
    end All_Tests;

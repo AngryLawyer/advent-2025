@@ -14,4 +14,7 @@ package Day_9.Floors is
    function Line_Intersects (A : Line; B : Line) return Boolean;
    function Line_Intersects (R : Rect; L : Line) return Boolean;
    function Any_Line_Intersects_Rect (R : Rect; Lines : Line_Vectors.Vector) return Boolean;
+   function Inside_Shape (Lines : Line_Vectors.Vector ; C : Coordinate; Max_X : Positive) return Boolean;
+   function Inside_Shape (Lines : Line_Vectors.Vector ; R : Rect; Max_X : Positive) return Boolean;
+   function Largest_X_Bound (Lines : Line_Vectors.Vector) return Positive;
 end Day_9.Floors;
